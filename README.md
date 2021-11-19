@@ -6,8 +6,8 @@ A python module inspired by [jameslyons' pycipher module](https://github.com/jam
 ```plaintext
 pip install git+https://github.com/Malmosmo/pycipher2.git
 ```
-# Usage
 
+# Usage
 ```python
 >>> from pycipher2 import Caesar
 >>>
