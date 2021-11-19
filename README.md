@@ -2,6 +2,10 @@
 
 A python module inspired by [jameslyons' pycipher module](https://github.com/jameslyons/pycipher).
 
+# Install
+```plaintext
+pip install git+https://github.com/Malmosmo/pycipher2.git
+```
 # Usage
 
 ```python
