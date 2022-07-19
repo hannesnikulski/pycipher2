@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 # Author: Hannes Nikulski
 
-from typing import List, Tuple, Union
+from typing import Union
 
 
 def invDict(dictionary: dict) -> dict:
+    """
+    Inverts a dicitonary. Values have to be unique.
+    """
     newDict = {}
 
     for key, value in dictionary.items():
@@ -14,6 +17,9 @@ def invDict(dictionary: dict) -> dict:
 
 
 def getKeySquare(key: str, size: int, alphabet: str) -> None:
+    """
+    Returns a key square
+    """
     keyword = ""
 
     for char in key + alphabet:
@@ -26,39 +32,54 @@ def getKeySquare(key: str, size: int, alphabet: str) -> None:
     return [keyword[i * size:(i + 1) * size] for i in range(size)]
 
 
-def rmNoneAlphChars(text: str, alphabet: Union[list, str]) -> Tuple[str, List[Tuple[int, str]]]:
-    result = ""
-    rmChars = []
+def separate(text: str, alphabet: Union[list, str]) -> tuple[str, list[tuple[str, int]]]:
+    """
+    Returns `text` argument with every character removed, which is not in the alphabet.
+    The removed characters are also returned with their corresponding index in `text`.
+    The two returned values can be recombinded with the `include` function.
+    """
+    cleanText = ""
 
-    for index, char in enumerate(text):
-        if char not in alphabet:
-            rmChars.append((index, char))
+    removedChars = []
+
+    for idx, char in enumerate(text):
+        if char in alphabet:
+            cleanText += char
 
         else:
-            result += char
+            removedChars.append((char, idx))
 
-    return result, rmChars
-
-
-def rmIndices(text: str, indices: List[int]) -> str:
-    result = text
-    rmChars = []
-
-    for index in reversed(sorted(indices)):
-        rmChars.append((index, result[index]))
-        result = result[:index] + result[index + 1:]
-
-    return result, rmChars[::-1]
+    return cleanText, removedChars
 
 
-def addAlphChars(text: str, chars: List[Tuple[int, str]]) -> str:
-    for index, char in chars:
-        text = text[:index] + char + text[index:]
+def include(text: str, charIdxPairs: list[tuple[str, int]]) -> str:
+    """
+    Returns `text` with the characters in `charIdxPair` placed at their given index.
+    """
+    for char, idx in charIdxPairs:
+        text = text[:idx] + char + text[idx:]
 
     return text
 
 
+def remove(text: str, indices: list[int]) -> str:
+    """
+    Returns `text` with the characters at the given indices removed.
+    The removed character with their indices are also returned.
+    """
+    removedChars = []
+
+    for idx in reversed(sorted(indices)):
+        text = text[:idx] + text[idx + 1:]
+        removedChars.append((idx, text[idx]))
+
+    return text, removedChars[::-1]
+
+
 def interleave(string1: str, string2: str) -> str:
+    """
+    Assumes equal lengths of the inputs
+    """
     result = [''] * (len(string1) + len(string2))
     result[::2] = string1
     result[1::2] = string2

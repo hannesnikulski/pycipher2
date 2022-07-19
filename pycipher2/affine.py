@@ -21,17 +21,17 @@ class Affine:
     """
 
     def __init__(self, key: Tuple[int, int], alphabet: Union[list, str]) -> None:
-        self.a, self.b = key
+        self.multiplier, self.offset = key
         self.alphabet = alphabet
         self.length = len(self.alphabet)
 
-        assert math.gcd(self.a, self.length) == 1, ValueError(f"First element of key ({self.a}) has to be coprime with the length of the alphabet ({self.length})")
+        assert math.gcd(self.multiplier, self.length) == 1, ValueError(f"First element of key ({self.multiplier}) has to be coprime with the length of the alphabet ({self.length})")
 
         # Note: modular multiplicative inverse, works only in Python 3.8+
-        self.inv_a = pow(self.a, -1, self.length)
+        self.inverse = pow(self.multiplier, -1, self.length)
 
     def decrypt(self, ciphertext: str) -> str:
-        return "".join([self.alphabet[(self.inv_a * (self.alphabet.index(char) - self.b)) % self.length] for char in ciphertext])
+        return "".join([self.alphabet[(self.inverse * (self.alphabet.index(char) - self.offset)) % self.length] for char in ciphertext])
 
     def encrypt(self, plaintext: str) -> str:
-        return "".join([self.alphabet[(self.a * self.alphabet.index(char) + self.b) % self.length] for char in plaintext])
+        return "".join([self.alphabet[(self.multiplier * self.alphabet.index(char) + self.offset) % self.length] for char in plaintext])

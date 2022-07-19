@@ -14,10 +14,10 @@ class Rot13:
 
     def __init__(self, alphabet: Union[list, str]) -> None:
         self.alphabet = alphabet
-        self.cscipher = Caesar(13, self.alphabet)
+        self.cipher = Caesar(13, self.alphabet)
 
     def decrypt(self, ciphertext: str) -> str:
-        return self.cscipher.decrypt(ciphertext)
+        return self.cipher.decrypt(ciphertext)
 
     def encrypt(self, plaintext: str) -> str:
-        return self.cscipher.encrypt(plaintext)
+        return self.cipher.encrypt(plaintext)
