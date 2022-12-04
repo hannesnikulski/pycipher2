@@ -3,7 +3,7 @@
 
 import math
 
-from pycipher2 import Polybius
+from pycipher2.ciphers.polybius import Polybius
 
 
 class Bifid:

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # Author: Hannes Nikulski
 
-from pycipher2 import ColTrans
-from pycipher2 import Polybius
+from pycipher2.ciphers.coltrans import ColTrans
+from pycipher2.ciphers.polybius import Polybius
 
 
 class ADFGVX:

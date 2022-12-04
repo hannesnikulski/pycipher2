@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Author: Hannes Nikulski
 
-from pycipher2 import Caesar
+from pycipher2.ciphers.caesar import Caesar
 
 
 class Rot13:
