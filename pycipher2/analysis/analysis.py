@@ -1,68 +1,65 @@
-# https://de.wikipedia.org/wiki/Koinzidenzindex
+# -*- coding: utf-8 -*-
+# Author: Hannes Nikulski
 
-from typing import Union
+from pycipher2.util import stringCount
 
 
-def frequency(text: str, alphabet: Union[list, str]) -> dict[str, float]:
+def frequency(string: str, alphabet: list | str) -> dict[str, float]:
     """
-    Returns the frequency of every character in the alphabet in the text.
+    Returns the frequency of every character in the alphabet in the string.
     """
-    length = len(text)
-    return dict(zip(alphabet, [text.count(char) / length for char in alphabet]))
+    return {char: string.count(char) for char in alphabet}
 
 
-def compare(text1: str, text2: str) -> float:
+def compare(string1: str, string2: str) -> float:
     """
     Compares two texts character by character.
     Returns the ratio of equal characters (in the same position) to the length of the text.
     Similar to the 'Hamming Distance'.
     """
-    # TODO: Warning for strings of different lengths?
-    delta = [char1 == char2 for char1, char2 in zip(text1, text2)]
-    return sum(delta) / len(delta)
+    assert len(string1) == len(string2), "Strings have to be of equal lengths"
+
+    return sum(char1 == char2 for char1, char2 in zip(string1, string2)) / len(string1)
 
 
-def kullbackDistance(text1: str, text2: str, alphabet: Union[list, str]) -> float:
+def kullbackDistance(string1: str, string2: str, alphabet: list | str) -> float:
     """
-    Returns a number, which represents the similarity between the two texts.
+    Returns a number, which represents the similarity between two strings.
     """
-    counts = [(text1.count(char), text2.count(char)) for char in alphabet]
-    count1, count2 = list(zip(*counts))
+    count1 = [string1.count(char) for char in alphabet]
+    count2 = [string2.count(char) for char in alphabet]
 
-    return sum(map(lambda pair: pair[0] * pair[1], counts)) / (sum(count1) * sum(count2))
+    return sum(c1 * c2 for c1, c2 in zip(count1, count2)) / (sum(count1) * sum(count2))
 
 
-def kullbackInformation(text: str, alphabet: Union[list, str]) -> float:
+def kullbackInformation(string: str, alphabet: list | str) -> float:
     """
-    Returns the 'kullbackDistance' of the text with itself.
+    Returns the 'kullbackDistance' of the string with itself.
     """
-    return kullbackDistance(text, text, alphabet)
+    return kullbackDistance(string, string, alphabet)
 
 
-def coincidence(text: str, alphabet: Union[list, str]) -> float:
+def coincidence(string: str, alphabet: list | str) -> float:
     """
-    Returns the index of coincidence of a text.
+    Returns the index of coincidence of a string.
     """
-    counts = [text.count(char) for char in alphabet]
-    N = sum(counts)
+    counts = [string.count(char) for char in alphabet]
+    totalSum = sum(counts)
 
-    return sum(charCount * (charCount - 1) for charCount in counts) / (N * (N - 1))
+    return sum(charCount * (charCount - 1) for charCount in counts) / (totalSum * (totalSum - 1))
 
 
-def ngramDist(text: str, ngramSize: int) -> dict:
+def ngramDist(string: str, ngramSize: int) -> dict:
     """
     Returns the ngram Distribution of the given text.
     Assumes all non-alphabetic chars have been removed.
     """
     ngrams = {}
 
-    for idx in range(len(text) - ngramSize + 1):
-        block = text[idx:idx + ngramSize]
+    for idx in range(len(string) - ngramSize + 1):
+        block = string[idx:idx + ngramSize]
 
-        if block in ngrams:
-            ngrams[block] += 1
-
-        else:
-            ngrams[block] = 1
+        if block not in ngrams:
+            ngrams[block] = stringCount(string, block)
 
     return ngrams
